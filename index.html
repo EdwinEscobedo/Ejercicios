@@ -3,92 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio Animado de Arrastrar y Soltar</title>
+    <title>Ejercicio de Orden de Párrafos</title>
     <style>
-        /* Estilo para la página */
+        /* Estilo general */
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            margin: 0;
             background-color: #f0f4f8;
-        }
-
-        /* Contenedor principal */
-        .container {
-            text-align: center;
-            max-width: 400px;
+            margin: 0;
             padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Elementos arrastrables */
-        .draggable {
-            width: 100px;
-            height: 50px;
-            background-color: #4CAF50;
-            color: white;
+        h2 {
             text-align: center;
-            line-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo para los párrafos arrastrables */
+        .draggable {
+            width: 300px;
+            padding: 15px;
             margin: 10px;
+            background-color: #e3f2fd;
+            border: 2px solid #90caf9;
             border-radius: 8px;
             cursor: grab;
-            display: inline-block;
-            animation: appear 0.5s ease;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .draggable:active {
-            cursor: grabbing;
-        }
-
-        /* Zona donde se sueltan los elementos */
-        .dropzone {
-            width: 100%;
-            height: 100px;
-            background-color: #e0e0e0;
-            border: 2px dashed #b0bec5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        /* Animaciones */
-        @keyframes appear {
-            from { opacity: 0; transform: scale(0.5); }
-            to { opacity: 1; transform: scale(1); }
+            transition: background-color 0.3s ease;
         }
 
         .draggable.dragging {
             opacity: 0.7;
-            transform: scale(1.1);
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: grabbing;
+        }
+
+        /* Estilo de la zona de destino */
+        .dropzone {
+            width: 320px;
+            min-height: 400px;
+            background-color: #f0f4f8;
+            border: 2px dashed #90caf9;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Mensajes de resultado */
+        #successMessage, #errorMessage {
+            display: none;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            animation: fade-in 0.5s ease;
+        }
+
+        #successMessage {
+            color: #4caf50;
+        }
+
+        #errorMessage {
+            color: #e57373;
+        }
+
+        /* Animación de mensaje */
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Arrastra las frases y suéltalas en la caja</h2>
-        <div id="opciones">
-            <div class="draggable" draggable="true">Frase 1</div>
-            <div class="draggable" draggable="true">Frase 2</div>
-            <div class="draggable" draggable="true">Frase 3</div>
-        </div>
-        <div class="dropzone">Suelta aquí</div>
+    <h2>Ordena los párrafos sobre aprendizaje de máquina</h2>
+    <div id="opciones">
+        <div class="draggable" draggable="true" data-order="1">El aprendizaje no supervisado es una rama del aprendizaje de máquina en la que el modelo intenta encontrar patrones ocultos en un conjunto de datos no etiquetados...</div>
+        <div class="draggable" draggable="true" data-order="2">Entre los algoritmos de aprendizaje no supervisado más comunes se encuentran K-means y DBSCAN...</div>
+        <div class="draggable" draggable="true" data-order="3">Gracias a su capacidad para encontrar patrones ocultos, el agrupamiento se aplica en diversas áreas...</div>
     </div>
+    <div class="dropzone" id="zonaDestino"></div>
+
+    <!-- Mensajes de éxito o error -->
+    <div id="successMessage">¡Lo lograste! El orden es correcto.</div>
+    <div id="errorMessage">Incorrecto, intenta de nuevo.</div>
 
     <script>
-        // Seleccionar los elementos arrastrables y la zona de destino
         const draggables = document.querySelectorAll('.draggable');
-        const dropzone = document.querySelector('.dropzone');
+        const dropzone = document.getElementById('zonaDestino');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
 
-        // Agregar eventos para el arrastre
+        // Añadir eventos de arrastrar y soltar
         draggables.forEach(draggable => {
             draggable.addEventListener('dragstart', () => {
                 draggable.classList.add('dragging');
@@ -99,17 +105,34 @@
             });
         });
 
-        // Permitir soltar en la zona de destino
         dropzone.addEventListener('dragover', e => {
+            e.preventDefault();
+        });
+
+        dropzone.addEventListener('drop', e => {
             e.preventDefault();
             const dragging = document.querySelector('.dragging');
             dropzone.appendChild(dragging);
+            checkOrder();
         });
 
-        // Retroalimentación visual al soltar
-        dropzone.addEventListener('drop', () => {
-            alert("¡Bien hecho! Has colocado la frase en la zona correcta.");
-        });
+        function checkOrder() {
+            const items = Array.from(dropzone.children);
+            const correctOrder = items.every((item, index) => item.dataset.order == index + 1);
+
+            // Mostrar el mensaje adecuado y cambiar el color
+            if (items.length === 3) {
+                if (correctOrder) {
+                    items.forEach(item => item.style.backgroundColor = '#c8e6c9'); // Verde claro
+                    successMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                } else {
+                    items.forEach(item => item.style.backgroundColor = '#ffe0b2'); // Naranja claro
+                    successMessage.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                }
+            }
+        }
     </script>
 </body>
 </html>
