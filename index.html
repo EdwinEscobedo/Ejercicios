@@ -1,139 +1,27 @@
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'newrootpassword';
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio de Orden de Párrafos</title>
-    <style>
-        /* Estilo general */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f0f4f8;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* Estilo para los párrafos arrastrables */
-        .draggable {
-            width: 300px;
-            padding: 15px;
-            margin: 10px;
-            background-color: #e3f2fd;
-            border: 2px solid #90caf9;
-            border-radius: 8px;
-            cursor: grab;
-            transition: background-color 0.3s ease;
-        }
-
-        .draggable.dragging {
-            opacity: 0.7;
-            cursor: grabbing;
-        }
-
-        /* Estilo de la zona de destino */
-        .dropzone {
-            width: 320px;
-            min-height: 400px;
-            background-color: #f0f4f8;
-            border: 2px dashed #90caf9;
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        /* Mensajes de resultado */
-        #successMessage, #errorMessage {
-            display: none;
-            font-size: 1.5rem;
-            margin-top: 20px;
-            animation: fade-in 0.5s ease;
-        }
-
-        #successMessage {
-            color: #4caf50;
-        }
-
-        #errorMessage {
-            color: #e57373;
-        }
-
-        /* Animación de mensaje */
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
+    <title>Práctica de Redacción y Ortografía</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>Ordena los párrafos sobre aprendizaje de máquina</h2>
-    <div id="opciones">
-        <div class="draggable" draggable="true" data-order="1">El aprendizaje no supervisado es una rama del aprendizaje de máquina en la que el modelo intenta encontrar patrones ocultos en un conjunto de datos no etiquetados...</div>
-        <div class="draggable" draggable="true" data-order="2">Entre los algoritmos de aprendizaje no supervisado más comunes se encuentran K-means y DBSCAN...</div>
-        <div class="draggable" draggable="true" data-order="3">Gracias a su capacidad para encontrar patrones ocultos, el agrupamiento se aplica en diversas áreas...</div>
-    </div>
-    <div class="dropzone" id="zonaDestino"></div>
+    <div class="background-animation"></div>
+    <header>
+        <h1>Bienvenidos a la Práctica de Redacción y Ortografía</h1>
+        <p>Selecciona el tipo de ejercicio que deseas practicar</p>
+    </header>
+    <main class="exercise-selection">
+        <button onclick="startExercise('parrafos')">Párrafos</button>
+        <button onclick="startExercise('redaccion')">Redacción</button>
+        <button onclick="startExercise('ortografia')">Ortografía</button>
+        <button onclick="startExercise('conectores')">Conectores</button>
+    </main>
+    <footer>
+        <p>Desarrollado para mejorar tus habilidades de escritura</p>
+    </footer>
 
-    <!-- Mensajes de éxito o error -->
-    <div id="successMessage">¡Lo lograste! El orden es correcto.</div>
-    <div id="errorMessage">Incorrecto, intenta de nuevo.</div>
-
-    <script>
-        const draggables = document.querySelectorAll('.draggable');
-        const dropzone = document.getElementById('zonaDestino');
-        const successMessage = document.getElementById('successMessage');
-        const errorMessage = document.getElementById('errorMessage');
-
-        // Añadir eventos de arrastrar y soltar
-        draggables.forEach(draggable => {
-            draggable.addEventListener('dragstart', () => {
-                draggable.classList.add('dragging');
-            });
-
-            draggable.addEventListener('dragend', () => {
-                draggable.classList.remove('dragging');
-            });
-        });
-
-        dropzone.addEventListener('dragover', e => {
-            e.preventDefault();
-        });
-
-        dropzone.addEventListener('drop', e => {
-            e.preventDefault();
-            const dragging = document.querySelector('.dragging');
-            dropzone.appendChild(dragging);
-            checkOrder();
-        });
-
-        function checkOrder() {
-            const items = Array.from(dropzone.children);
-            const correctOrder = items.every((item, index) => item.dataset.order == index + 1);
-
-            // Mostrar el mensaje adecuado y cambiar el color
-            if (items.length === 3) {
-                if (correctOrder) {
-                    items.forEach(item => item.style.backgroundColor = '#c8e6c9'); // Verde claro
-                    successMessage.style.display = 'block';
-                    errorMessage.style.display = 'none';
-                } else {
-                    items.forEach(item => item.style.backgroundColor = '#ffe0b2'); // Naranja claro
-                    successMessage.style.display = 'none';
-                    errorMessage.style.display = 'block';
-                }
-            }
-        }
-    </script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>

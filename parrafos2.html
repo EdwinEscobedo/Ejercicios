@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Orden de Párrafos</title>
+    <style>
+        /* Fondo animado */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Contenedor para el fondo animado */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196f3, #f44336, #ffeb3b);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        /* Animación del fondo */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Contenido principal */
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Estilo para los párrafos arrastrables */
+        .draggable {
+            width: 300px;
+            padding: 15px;
+            margin: 10px;
+            background-color: #e3f2fd;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
+            cursor: grab;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropzone {
+            width: 320px;
+            min-height: 400px;
+            background-color: #f0f4f8;
+            border: 2px dashed #90caf9;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        #successMessage, #errorMessage, #hint {
+            display: none;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            animation: fade-in 0.5s ease;
+        }
+
+        #successMessage {
+            color: #4caf50;
+        }
+
+        #errorMessage {
+            color: #ff7043;
+            background-color: #ffe0b2;
+            padding: 10px;
+            border-radius: 5px;
+            animation: shake 0.5s ease;
+        }
+
+        #hint {
+            color: #ff7043;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        /* Barra de progreso */
+        #progressBar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0;
+            transition: width 0.3s;
+        }
+
+        /* Animación de sacudida para el mensaje de error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="content">
+        <h2>Ordena los párrafos para pasar al siguiente ejercicio</h2>
+        
+        <div id="progressBar">
+            <div id="progress"></div>
+        </div>
+        
+        <button onclick="showHint()">Mostrar Pista</button>
+        <div id="hint">Recuerda que el primer párrafo introduce el tema general.</div>
+
+        <div id="exerciseContainer">
+            <div id="opciones"></div>
+            <div class="dropzone" id="zonaDestino"></div>
+        </div>
+
+        <!-- Mensajes y puntos -->
+        <div id="successMessage">¡Lo lograste! Pasando al siguiente ejercicio...</div>
+        <div id="errorMessage">Incorrecto, intenta de nuevo.</div>
+        <div>Puntos: <span id="score">0</span></div>
+        <div>Tiempo: <span id="time">0</span> segundos</div>
+        
+        <!-- Sonidos de retroalimentación -->
+        <audio id="correctSound" src="correct.mp3"></audio>
+        <audio id="incorrectSound" src="incorrect.mp3"></audio>
+    </div>
+
+    <script>
+        // Ejercicios y configuración
+        const exercises = [
+            [
+                { text: "El aprendizaje no supervisado es una rama del aprendizaje de máquina...", order: 1 },
+                { text: "Entre los algoritmos de aprendizaje no supervisado más comunes...", order: 2 },
+                { text: "Gracias a su capacidad para encontrar patrones ocultos...", order: 3 }
+            ],
+            [
+                { text: "Los juegos serios están diseñados con fines educativos o de entrenamiento...", order: 1 },
+                { text: "Un ejemplo es el uso de simulaciones en la formación de profesionales médicos...", order: 2 },
+                { text: "Estos juegos permiten a los usuarios practicar habilidades en un entorno seguro...", order: 3 }
+            ],
+            [
+                { text: "La ciberseguridad es fundamental para proteger la información en la era digital...", order: 1 },
+                { text: "Medidas como la autenticación de dos factores y el cifrado ayudan a proteger...", order: 2 },
+                { text: "Además, la educación de los usuarios es crucial para prevenir ataques comunes...", order: 3 }
+            ],
+            [
+                { text: "El Internet de las Cosas (IoT) permite la interconexión de dispositivos a través de internet...", order: 1 },
+                { text: "Dispositivos como termostatos inteligentes y sensores de salud monitorean y transmiten datos...", order: 2 },
+                { text: "Esta tecnología está revolucionando sectores como la salud, el transporte y la agricultura...", order: 3 }
+            ]
+        ];
+        let currentExercise = 0;
+        let score = 0;
+        let startTime = 0;
+
+        const opcionesDiv = document.getElementById('opciones');
+        const dropzone = document.getElementById('zonaDestino');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const progress = document.getElementById('progress');
+        const correctSound = document.getElementById("correctSound");
+        const incorrectSound = document.getElementById("incorrectSound");
+
+        function loadExercise() {
+            opcionesDiv.innerHTML = '';
+            dropzone.innerHTML = '';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            document.getElementById('hint').style.display = 'none';
+            startTime = new Date().getTime();
+
+            exercises[currentExercise].forEach(paragraph => {
+                const paraDiv = document.createElement('div');
+                paraDiv.className = 'draggable';
+                paraDiv.draggable = true;
+                paraDiv.textContent = paragraph.text;
+                paraDiv.dataset.order = paragraph.order;
+                opcionesDiv.appendChild(paraDiv);
+
+                paraDiv.addEventListener('dragstart', () => paraDiv.classList.add('dragging'));
+                paraDiv.addEventListener('dragend', () => paraDiv.classList.remove('dragging'));
+            });
+        }
+
+        dropzone.addEventListener('dragover', e => e.preventDefault());
+        dropzone.addEventListener('drop', () => {
+            const dragging = document.querySelector('.dragging');
+            if (dragging) {
+                dropzone.appendChild(dragging);
+                checkOrder();
+            }
+        });
+
+        function checkOrder() {
+            const items = Array.from(dropzone.children);
+            const correctOrder = items.every((item, index) => item.dataset.order == index + 1);
+
+            if (items.length === exercises[currentExercise].length) {
+                if (correctOrder) {
+                    items.forEach(item => item.style.backgroundColor = '#c8e6c9'); // Verde claro
+                    successMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                    score++;
+                    scoreDisplay.textContent = score;
+                    correctSound.play();
+                    const endTime = new Date().getTime();
+                    const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                    timeDisplay.textContent = timeTaken;
+                    progress.style.width = ((currentExercise + 1) / exercises.length) * 100 + "%";
+                    setTimeout(nextExercise, 2000); // Pausa antes de avanzar
+                } else {
+                    items.forEach(item => item.style.backgroundColor = '#ffe0b2'); // Naranja claro
+                    successMessage.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                    incorrectSound.play();
+                }
+            }
+        }
+
+        function showHint() {
+            document.getElementById('hint').style.display = 'block';
+        }
+
+        function nextExercise() {
+            currentExercise++;
+            if (currentExercise < exercises.length) {
+                loadExercise();
+            } else {
+                alert(`¡Felicidades! Completaste todos los ejercicios con un total de ${score} puntos y un tiempo total de ${timeDisplay.textContent} segundos.`);
+            }
+        }
+
+        loadExercise();
+    </script>
+</body>
+</html>

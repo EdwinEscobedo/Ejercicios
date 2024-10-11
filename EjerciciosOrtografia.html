@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Ortografía</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .section {
+            display: none;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .section.active {
+            display: block;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .question {
+            margin: 10px 0;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Práctica de Ortografía</h1>
+
+    <div class="section active" id="section1">
+        <div class="section-title">Sección 1: Ejercicios de Acentuación</div>
+        <div class="question">1. Solo quiero descansar. (¿Debe llevar tilde?) <input type="text" id="answer1-1"></div>
+        <div class="question">2. Este es mi cuaderno. (¿Debe llevar tilde?) <input type="text" id="answer1-2"></div>
+        <div class="question">3. Esa película es interesante. (¿Debe llevar tilde?) <input type="text" id="answer1-3"></div>
+        <div class="question">4. Solo yo fui al evento. (¿Debe llevar tilde?) <input type="text" id="answer1-4"></div>
+        <div class="question">5. Aquella tarde fue soleada. (¿Debe llevar tilde?) <input type="text" id="answer1-5"></div>
+        <div class="question">6. Estos zapatos son nuevos. (¿Debe llevar tilde?) <input type="text" id="answer1-6"></div>
+        <div class="question">7. Esta comida es deliciosa. (¿Debe llevar tilde?) <input type="text" id="answer1-7"></div>
+        <div class="question">8. Solo quiero estar en paz. (¿Debe llevar tilde?) <input type="text" id="answer1-8"></div>
+        <div class="question">9. Aquellos días eran mejores. (¿Debe llevar tilde?) <input type="text" id="answer1-9"></div>
+        <div class="question">10. Esa es mi respuesta. (¿Debe llevar tilde?) <input type="text" id="answer1-10"></div>
+        <button onclick="showSection(2)">Siguiente Sección</button>
+    </div>
+
+    <div class="section" id="section2">
+        <div class="section-title">Sección 2: Ejercicios sobre Prefijos</div>
+        <div class="question">1. Escribe la forma correcta: exnovio o ex-novio <input type="text" id="answer2-1"></div>
+        <div class="question">2. Escribe la forma correcta: antiinflamatorio o anti-inflamatorio <input type="text" id="answer2-2"></div>
+        <div class="question">3. Escribe la forma correcta: subdirector o sub-director <input type="text" id="answer2-3"></div>
+        <div class="question">4. Escribe la forma correcta: proamericano o pro-americano <input type="text" id="answer2-4"></div>
+        <div class="question">5. Escribe la forma correcta: vicealcalde o vice-alcalde <input type="text" id="answer2-5"></div>
+        <div class="question">6. Escribe la forma correcta: macroeconomía o macro-economía <input type="text" id="answer2-6"></div>
+        <div class="question">7. Escribe la forma correcta: preuniversitario o pre-universitario <input type="text" id="answer2-7"></div>
+        <div class="question">8. Escribe la forma correcta: cooperar o co-operar <input type="text" id="answer2-8"></div>
+        <div class="question">9. Escribe la forma correcta: coorganizar o co-organizar <input type="text" id="answer2-9"></div>
+        <div class="question">10. Escribe la forma correcta: exalumno o ex-alumno <input type="text" id="answer2-10"></div>
+        <button onclick="showSection(3)">Siguiente Sección</button>
+    </div>
+
+    <div class="section" id="section3">
+        <div class="section-title">Sección 3: Ortografía de Símbolos, Decimales y Cardinales</div>
+        <div class="question">1. ¿Cómo se escribe correctamente?: 15 % o 15% <input type="text" id="answer3-1"></div>
+        <div class="question">2. ¿Cuál es la forma correcta?: 1 234,56 o 1234.56 <input type="text" id="answer3-2"></div>
+        <div class="question">3. ¿Cómo se escribe?: los 80 o los años 80 <input type="text" id="answer3-3"></div>
+        <div class="question">4. ¿Es correcto?: 24,5 o 24.5 <input type="text" id="answer3-4"></div>
+        <div class="question">5. ¿Qué es correcto?: 2´ 20´´ o 2' 20'' <input type="text" id="answer3-5"></div>
+        <div class="question">6. ¿Cómo se escribe?: 30 % o 30% <input type="text" id="answer3-6"></div>
+        <div class="question">7. ¿Qué es correcto?: 45ºC o 45 °C <input type="text" id="answer3-7"></div>
+        <div class="question">8. ¿Es correcto?: cincuentaitrés o cincuenta y tres <input type="text" id="answer3-8"></div>
+        <div class="question">9. ¿Cuál es correcto?: setentaisiete o setenta y siete <input type="text" id="answer3-9"></div>
+        <div class="question">10. ¿Qué es correcto?: 3 km o 3km <input type="text" id="answer3-10"></div>
+        <button onclick="calculateScore()">Calcular Puntaje</button>
+    </div>
+
+    <div class="result" id="score"></div>
+
+    <script>
+        function showSection(sectionNumber) {
+            let sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById('section' + sectionNumber).classList.add('active');
+        }
+
+        function calculateScore() {
+            let score = 0;
+            let correctAnswers = {
+                "answer1-1": "no",
+                "answer1-2": "no",
+                "answer1-3": "no",
+                "answer1-4": "no",
+                "answer1-5": "no",
+                "answer1-6": "no",
+                "answer1-7": "no",
+                "answer1-8": "no",
+                "answer1-9": "no",
+                "answer1-10": "no",
+                "answer2-1": "exnovio",
+                "answer2-2": "antiinflamatorio",
+                "answer2-3": "subdirector",
+                "answer2-4": "proamericano",
+                "answer2-5": "vicealcalde",
+                "answer2-6": "macroeconomía",
+                "answer2-7": "preuniversitario",
+                "answer2-8": "cooperar",
+                "answer2-9": "coorganizar",
+                "answer2-10": "exalumno",
+                "answer3-1": "15 %",
+                "answer3-2": "1 234,56",
+                "answer3-3": "los 80",
+                "answer3-4": "24,5",
+                "answer3-5": "2´ 20´´",
+                "answer3-6": "30 %",
+                "answer3-7": "45 °C",
+                "answer3-8": "cincuentaitrés",
+                "answer3-9": "setentaisiete",
+                "answer3-10": "3 km"
+            };
+
+            let feedback = '<h2>Resultados:</h2>';
+            for (let key in correctAnswers) {
+                let userAnswer = document.getElementById(key).value.trim().toLowerCase();
+                if (userAnswer === correctAnswers[key]) {
+                    score++;
+                    feedback += `<p>Pregunta ${key.replace('answer', '')}: Correcto</p>`;
+                } else {
+                    feedback += `<p>Pregunta ${key.replace('answer', '')}: Incorrecto. Respuesta correcta: ${correctAnswers[key]}</p>`;
+                }
+            }
+
+            document.getElementById('score').innerHTML = `Tu puntaje total es: ${score}/30 <br>${feedback}`;
+        }
+    </script>
+</body>
+</html>

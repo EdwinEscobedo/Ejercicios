@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad de Ordenación - Secuencia y Correlación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg, #ffcc80, #ffb74d);
+            animation: backgroundMove 5s linear infinite;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes backgroundMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        h1 {
+            color: #fff;
+            margin-top: 50px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .sentence {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            cursor: move;
+        }
+
+        .highlight-correct {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .highlight-wrong {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .button {
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #e65100;
+        }
+
+        .hint {
+            display: none;
+            margin-top: 20px;
+            background-color: #ffe082;
+            padding: 10px;
+            border: 1px solid #ffb74d;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ordena las Oraciones en Secuencia Temporal</h1>
+    <div class="container" id="container">
+        <div class="sentence" draggable="true" id="s1">A pesar de que aún no se han obtenido resultados finales en términos de predicciones de fallas, la meticulosa preparación de los datos sienta las bases para el desarrollo e implementación de los algoritmos de aprendizaje automático, que se realizarán en las siguientes etapas del proyecto.</div>
+        <div class="sentence" draggable="true" id="s2">Esta preparación de datos no solo garantiza la precisión de las futuras predicciones, sino que también permite identificar patrones y tendencias clave para el mantenimiento predictivo.</div>
+        <div class="sentence" draggable="true" id="s3">Una vez completada esta fase inicial, se avanzará hacia el análisis y modelado, lo que se espera contribuir significativamente a la efectividad del sistema propuesto.</div>
+        <div class="sentence" draggable="true" id="s4">Este enfoque integral es crucial para optimizar la salud vehicular y resalta la importancia de esta investigación en el mantenimiento vehicular.</div>
+    </div>
+
+    <button class="button" onclick="checkOrder()">Verificar</button>
+    <button class="button" onclick="showHint()">Sugerencia</button>
+    
+    <div class="hint" id="hint">
+        <p id="hintText"></p>
+    </div>
+
+    <script>
+        let sentences = [
+            { id: 's1', text: "A pesar de que aún no se han obtenido resultados finales en términos de predicciones de fallas, la meticulosa preparación de los datos sienta las bases para el desarrollo e implementación de los algoritmos de aprendizaje automático, que se realizarán en las siguientes etapas del proyecto." },
+            { id: 's2', text: "Esta preparación de datos no solo garantiza la precisión de las futuras predicciones, sino que también permite identificar patrones y tendencias clave para el mantenimiento predictivo." },
+            { id: 's3', text: "Una vez completada esta fase inicial, se avanzará hacia el análisis y modelado, lo que se espera contribuir significativamente a la efectividad del sistema propuesto." },
+            { id: 's4', text: "Este enfoque integral es crucial para optimizar la salud vehicular y resalta la importancia de esta investigación en el mantenimiento vehicular." }
+        ];
+
+        let correctOrder = ['s1', 's2', 's3', 's4'];
+        let hints = [
+            "El primer paso es preparar los datos meticulosamente antes de realizar predicciones.",
+            "Las tendencias clave para el mantenimiento predictivo se identifican después de la preparación de datos.",
+            "Solo después de completar la fase de preparación de datos podemos avanzar al análisis y modelado.",
+            "El enfoque integral busca optimizar la salud vehicular al final."
+        ];
+        let hintIndex = 0;
+
+        // Inicializa el juego con un orden aleatorio
+        function initializeGame() {
+            let shuffledSentences = shuffleArray(sentences);
+
+            // Asegurarse de que no sea el mismo orden correcto
+            while (JSON.stringify(shuffledSentences.map(s => s.id)) === JSON.stringify(correctOrder)) {
+                shuffledSentences = shuffleArray(sentences);
+            }
+
+            let container = document.getElementById('container');
+            container.innerHTML = '';
+
+            shuffledSentences.forEach(sentence => {
+                let div = document.createElement('div');
+                div.classList.add('sentence');
+                div.draggable = true;
+                div.id = sentence.id;
+                div.textContent = sentence.text;
+                div.addEventListener('dragstart', dragStart);
+                div.addEventListener('dragover', dragOver);
+                div.addEventListener('drop', drop);
+                container.appendChild(div);
+            });
+        }
+
+        function shuffleArray(array) {
+            let newArray = array.slice(); // Copia el array original
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(draggedId);
+            const targetElement = e.target;
+
+            if (targetElement.classList.contains('sentence')) {
+                container.insertBefore(draggedElement, targetElement);
+            }
+        }
+
+        function checkOrder() {
+            const order = ['s1', 's2', 's3', 's4'];  // El orden correcto de las oraciones
+            let currentOrder = Array.from(document.querySelectorAll('.sentence')).map(sentence => sentence.id);
+            
+            let correct = true;
+
+            currentOrder.forEach((id, index) => {
+                let para = document.getElementById(id);
+                if (id === order[index]) {
+                    para.classList.add('highlight-correct');
+                    para.classList.remove('highlight-wrong');
+                } else {
+                    para.classList.add('highlight-wrong');
+                    para.classList.remove('highlight-correct');
+                    correct = false;
+                }
+            });
+
+            if (correct) {
+                alert('¡Éxito! El orden es correcto.');
+            } else {
+                alert('Error. Inténtalo de nuevo.');
+            }
+        }
+
+        function showHint() {
+            document.getElementById('hintText').textContent = hints[hintIndex];
+            document.getElementById('hint').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('hint').style.display = 'none';
+            }, 10000);  // La sugerencia desaparecerá después de 10 segundos
+
+            hintIndex = (hintIndex + 1) % hints.length;  // Ciclo a través de las sugerencias
+        }
+
+        // Inicializar el juego cuando se carga la página
+        window.onload = initializeGame;
+    </script>
+
+</body>
+</html>

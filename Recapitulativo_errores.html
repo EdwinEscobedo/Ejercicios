@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Ortografía</title>
+    <style>
+        /* Fondo animado */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196f3, #f44336, #ffeb3b);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 85vh;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #333;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .sidebar button {
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ff7043;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: left;
+            width: 100%;
+        }
+
+        .sidebar button:hover {
+            background-color: #e64a19;
+        }
+
+        .sidebar .home-button {
+            margin-top: auto;
+            background-color: #4caf50;
+        }
+
+        .sidebar .home-button:hover {
+            background-color: #388e3c;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-message {
+            font-size: 16px;
+            color: #333;
+            max-width: 1000px;
+            text-align: left;
+            line-height: 1.7;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-message h2 {
+            color: #2196f3;
+            font-size: 20px;
+            margin-top: 0;
+        }
+
+        .welcome-message ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <h1>Ejercicios de Ortografía</h1>
+
+    <div class="container">
+        <div class="sidebar">
+            <button onclick="loadPage('Ambiguedad.html')">Ambigüedad</button>
+            <button onclick="loadPage('VozActiva.html')">Voz Activa</button>
+            <button onclick="loadPage('SecuenciasCorrelaciones.html')">Secuencias y Correlaciones</button>
+            <button onclick="loadPage('UsoIndebidoGerundio.html')">Uso Indebido del Gerundio</button>
+            <button onclick="loadPage('Dequeismo.html')">Dequeísmo</button>
+            <button onclick="loadPage('UsoExcesivoAdverbios.html')">Uso Excesivo de Adverbios</button>
+            <button onclick="loadPage('UsoElMismo.html')">Uso de 'El Mismo'/'La Misma'</button>
+            <button onclick="loadPage('UsoIndiscriminadoAdjetivos.html')">Uso Indiscriminado de Adjetivos</button>
+            <button onclick="loadPage('AbundanciaIncisos.html')">Abundancia de Incisos</button>
+
+            <button class="home-button" onclick="goToHome()">Ir al Inicio</button>
+        </div>
+
+        <div class="content">
+            <div id="welcomeMessage" class="welcome-message">
+                <h2>Bienvenido a los Ejercicios de Ortografía</h2>
+                <p>La ortografía es una habilidad esencial para comunicarnos de manera clara y precisa. A continuación, te presentamos algunos de los errores ortográficos más comunes y consejos sobre cómo evitarlos en tus escritos:</p>
+                <h2>Errores Comunes en Ortografía</h2>
+                <ul>
+                    <li><strong>Ambigüedad:</strong> Ocurre cuando una frase tiene múltiples interpretaciones posibles. Es clave ser claro y preciso para evitar malentendidos.</li>
+                    <li><strong>Voz Activa:</strong> La voz activa da fuerza y claridad a tus frases, haciéndolas más directas. La voz pasiva puede ser menos impactante y confusa.</li>
+                    <li><strong>Secuencias y Correlaciones:</strong> Asegura que las ideas se presenten en un orden lógico y coherente para mejorar la comprensión.</li>
+                    <li><strong>Uso Indebido del Gerundio:</strong> El gerundio expresa una acción simultánea al verbo principal. Es importante conocer cuándo usarlo correctamente.</li>
+                    <li><strong>Dequeísmo:</strong> Este error se da al añadir la preposición "de" innecesariamente antes de "que". Aprende cuándo es correcto usarla.</li>
+                    <li><strong>Uso Excesivo de Adverbios:</strong> Usar demasiados adverbios debilita la frase. Úsalos solo cuando sean necesarios.</li>
+                    <li><strong>Uso de "El Mismo/La Misma":</strong> Reemplaza estos términos con pronombres adecuados o posesivos para evitar repeticiones innecesarias.</li>
+                    <li><strong>Uso Indiscriminado de Adjetivos:</strong> Los adjetivos deben añadir valor y ser usados con moderación para evitar redundancias.</li>
+                    <li><strong>Abundancia de Incisos:</strong> Limita los incisos para mantener un flujo claro en el texto y evitar interrupciones innecesarias.</li>
+                </ul>
+                <p>Selecciona un tema en la barra de la izquierda para comenzar. ¡A practicar!</p>
+            </div>
+            <iframe id="contentFrame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function loadPage(page) {
+            document.getElementById('welcomeMessage').style.display = 'none';
+            document.getElementById('contentFrame').src = page;
+            document.getElementById('contentFrame').style.display = 'block';
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Uso de "El Mismo/La Misma"</title>
+    <style>
+        /* Fondo animado */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196f3, #f44336, #ffeb3b);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            width: 90%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            height: 86vh;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .question-container {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ff7043;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e64a19;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 5px;
+            display: none;
+            text-align: left;
+        }
+
+        .correct {
+            color: #4caf50;
+            background-color: #c8e6c9;
+        }
+
+        .incorrect {
+            color: #ff7043;
+            background-color: #ffe0b2;
+        }
+
+        .hint {
+            color: #1976d2;
+            background-color: #bbdefb;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            display: none;
+            text-align: left;
+        }
+
+        #nextExercise {
+            background-color: #4caf50;
+            margin-top: 20px;
+        }
+
+        #nextExercise:hover {
+            background-color: #388e3c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Panel de logro */
+        .achievement-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 400px;
+            background-color: #333;
+            border-radius: 10px;
+            color: #FFD700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            z-index: 100;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .achievement-top {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .achievement-bottom {
+            font-size: 36px;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="content">
+        <h2>Ejercicios de Uso de "El Mismo/La Misma"</h2>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- Ejercicio 1 -->
+        <div id="exercise1" class="exercise question-container">
+            <p><strong>Ejercicio 1:</strong> "El modelo de machine learning fue ajustado y, a través del mismo, se lograron mejores resultados."</p>
+            <div class="option-container">
+                <input type="radio" name="exercise1" value="1" id="e1o1">
+                <label for="e1o1">El modelo de machine learning fue ajustado y, a través del mismo modelo, se lograron mejores resultados.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise1" value="0" id="e1o2">
+                <label for="e1o2">El modelo de machine learning fue ajustado y, a través de él, se lograron mejores resultados.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise1" value="2" id="e1o3">
+                <label for="e1o3">El modelo de machine learning fue ajustado, logrando mejores resultados gracias al mismo.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise1" value="3" id="e1o4">
+                <label for="e1o4">El modelo de machine learning fue ajustado y, mediante el mismo, se observaron resultados mejorados.</label>
+            </div>
+            <div class="button-container">
+                <button onclick="showHint('hint1')">Mostrar Pista</button>
+                <button onclick="checkAnswer('exercise1', 0)">Verificar Respuesta</button>
+            </div>
+            <div id="feedback1" class="feedback"></div>
+            <div id="hint1" class="hint">Pista: Reemplaza "el mismo" con un pronombre adecuado para mayor claridad.</div>
+        </div>
+
+        <!-- Ejercicio 2 -->
+        <div id="exercise2" class="exercise question-container">
+            <p><strong>Ejercicio 2:</strong> "El juego serio fue diseñado para mejorar la participación de los estudiantes, logrando buenos resultados con el mismo."</p>
+            <div class="option-container">
+                <input type="radio" name="exercise2" value="0" id="e2o1">
+                <label for="e2o1">El juego serio fue diseñado para mejorar la participación de los estudiantes, logrando buenos resultados con él.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise2" value="1" id="e2o2">
+                <label for="e2o2">El juego serio fue diseñado para mejorar la participación de los estudiantes, logrando buenos resultados con el mismo juego.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise2" value="2" id="e2o3">
+                <label for="e2o3">El juego serio fue diseñado para aumentar la participación y, a través del mismo, se lograron buenos resultados.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise2" value="3" id="e2o4">
+                <label for="e2o4">El juego serio fue diseñado para mejorar la participación, consiguiendo resultados positivos con el mismo.</label>
+            </div>
+            <div class="button-container">
+                <button onclick="showHint('hint2')">Mostrar Pista</button>
+                <button onclick="checkAnswer('exercise2', 0)">Verificar Respuesta</button>
+            </div>
+            <div id="feedback2" class="feedback"></div>
+            <div id="hint2" class="hint">Pista: Usa un pronombre para evitar la repetición de "el mismo".</div>
+        </div>
+
+        <!-- Ejercicio 3 -->
+        <div id="exercise3" class="exercise question-container">
+            <p><strong>Ejercicio 3:</strong> "La red de sensores IoT monitorea la calidad del aire y la temperatura, con el propósito de analizar la misma constantemente."</p>
+            <div class="option-container">
+                <input type="radio" name="exercise3" value="2" id="e3o1">
+                <label for="e3o1">La red de sensores IoT monitorea la calidad del aire y la temperatura, con el propósito de analizar la misma de manera constante.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise3" value="3" id="e3o2">
+                <label for="e3o2">La red de sensores IoT monitorea la calidad del aire y la temperatura, buscando analizar la misma de forma constante.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise3" value="0" id="e3o3">
+                <label for="e3o3">La red de sensores IoT monitorea la calidad del aire y la temperatura, con el propósito de analizarlas constantemente.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise3" value="1" id="e3o4">
+                <label for="e3o4">La red de sensores IoT monitorea la calidad del aire y la temperatura, con el propósito de analizar continuamente la misma.</label>
+            </div>
+            <div class="button-container">
+                <button onclick="showHint('hint3')">Mostrar Pista</button>
+                <button onclick="checkAnswer('exercise3', 0)">Verificar Respuesta</button>
+            </div>
+            <div id="feedback3" class="feedback"></div>
+            <div id="hint3" class="hint">Pista: Reemplaza "la misma" por un pronombre adecuado en plural.</div>
+        </div>
+
+        <!-- Ejercicio 4 -->
+        <div id="exercise4" class="exercise question-container">
+            <p><strong>Ejercicio 4:</strong> "La política de ciberseguridad fue actualizada, y en la misma se incluyen nuevas reglas de protección de datos."</p>
+            <div class="option-container">
+                <input type="radio" name="exercise4" value="1" id="e4o1">
+                <label for="e4o1">La política de ciberseguridad fue actualizada, y en la misma política se incluyen nuevas reglas de protección de datos.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise4" value="3" id="e4o2">
+                <label for="e4o2">La política de ciberseguridad fue actualizada, y en la misma se establecen nuevas reglas de protección de datos.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise4" value="2" id="e4o3">
+                <label for="e4o3">La política de ciberseguridad fue actualizada, y en dicha política se incluyen nuevas reglas de protección.</label>
+            </div>
+            <div class="option-container">
+                <input type="radio" name="exercise4" value="0" id="e4o4">
+                <label for="e4o4">La política de ciberseguridad fue actualizada, y en ella se incluyen nuevas reglas de protección de datos.</label>
+            </div>
+            <div class="button-container">
+                <button onclick="showHint('hint4')">Mostrar Pista</button>
+                <button onclick="checkAnswer('exercise4', 0)">Verificar Respuesta</button>
+            </div>
+            <div id="feedback4" class="feedback"></div>
+            <div id="hint4" class="hint">Pista: Usa un pronombre como "ella" para evitar redundancias.</div>
+        </div>
+
+        <button id="nextExercise" onclick="nextExercise()">Siguiente Ejercicio</button>
+        <div id="timeMessage" style="display: none; font-weight: bold; margin-top: 20px;"></div>
+
+    </div>
+
+    <!-- Panel de logro -->
+    <div id="achievementPanel" class="achievement-panel">
+        <div class="achievement-top">¡Excelente trabajo!</div>
+        <div class="achievement-bottom" id="medalDisplay">Medalla Obtenida: 🥇 Oro</div>
+    </div>
+
+    <script>
+        let currentExercise = 1;
+        let startTime;
+        let correctAnswers = 0;
+
+        window.onload = () => {
+            startTime = new Date().getTime();
+            document.getElementById(`exercise${currentExercise}`).style.display = "flex"; // Muestra solo el primer ejercicio
+            updateProgress();
+        };
+
+        function checkAnswer(exerciseId, correctAnswer) {
+            const selectedOption = document.querySelector(`input[name="${exerciseId}"]:checked`);
+            const feedback = document.getElementById(`feedback${exerciseId.slice(-1)}`);
+            
+            if (selectedOption) {
+                const selectedValue = parseInt(selectedOption.value);
+                if (selectedValue === correctAnswer) {
+                    feedback.textContent = "¡Correcto! Muy bien, has seleccionado la respuesta correcta.";
+                    feedback.className = "feedback correct";
+                    correctAnswers++;
+                } else {
+                    feedback.textContent = "Incorrecto. Vuelve a intentarlo.";
+                    feedback.className = "feedback incorrect";
+                }
+                feedback.style.display = "block";
+                lockOptions(exerciseId);
+            } else {
+                feedback.textContent = "Por favor selecciona una opción.";
+                feedback.className = "feedback incorrect";
+                feedback.style.display = "block";
+            }
+        }
+
+        function lockOptions(exerciseId) {
+            const options = document.querySelectorAll(`input[name="${exerciseId}"]`);
+            options.forEach(option => option.disabled = true);
+        }
+
+        function showHint(hintId) {
+            document.getElementById(hintId).style.display = "block";
+        }
+
+        function nextExercise() {
+            document.getElementById(`exercise${currentExercise}`).style.display = "none"; // Oculta el ejercicio actual
+            currentExercise++;
+            const nextExercise = document.getElementById(`exercise${currentExercise}`);
+            
+            if (nextExercise) {
+                nextExercise.style.display = "flex"; // Muestra el siguiente ejercicio
+            } else {
+                endExercise();
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progressPercent = (currentExercise / 4) * 100;
+            document.getElementById("progress").style.width = `${progressPercent}%`;
+        }
+
+        function endExercise() {
+            const endTime = new Date().getTime();
+            const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+            let medal = "";
+
+            if (correctAnswers === 4) {
+                medal = "🥇 Oro";
+            } else if (correctAnswers === 3) {
+                medal = "🥈 Plata";
+            } else if (correctAnswers === 2) {
+                medal = "🥉 Bronce";
+            } else {
+                medal = "Sin medalla";
+            }
+
+            document.getElementById("timeMessage").textContent = `¡Has completado todos los ejercicios! Tiempo total: ${timeTaken} segundos. Respuestas correctas: ${correctAnswers} de 4.`;
+            document.getElementById("timeMessage").style.display = "block";
+            document.getElementById("nextExercise").style.display = "none";
+            displayMedal(medal);
+        }
+
+        function displayMedal(medal) {
+            document.getElementById("medalDisplay").textContent = `Medalla Obtenida: ${medal}`;
+            document.getElementById("achievementPanel").style.display = "flex"; // Mostrar el panel solo al final
+        }
+    </script>
+</body>
+</html>

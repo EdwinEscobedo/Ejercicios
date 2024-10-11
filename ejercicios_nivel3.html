@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Ordenación de Párrafos - Nivel 2</title>
+    <style>
+        /* Fondo en tono naranja mate */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4a261;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            height: 65vh;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        /* Panel izquierdo para frases */
+        .phrases {
+            width: 40%;
+            background-color: #e0f7fa;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+        }
+
+        /* Frases arrastrables */
+        .draggable {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #b3e5fc;
+            border: 1px solid #81d4fa;
+            border-radius: 5px;
+            cursor: grab;
+            font-size: 16px;
+        }
+
+        /* Panel derecho para soltar las frases */
+        .dropzone {
+            flex-grow: 1;
+            min-width: 300px;
+            background-color: rgba(240, 240, 240, 0.9);
+            border: 2px dashed #2196f3;
+            padding: 20px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dropzone .placeholder {
+            color: #999;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Barra de progreso */
+        .progress-bar {
+            width: 90%;
+            height: 20px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Contador de ejercicio */
+        .exercise-counter {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* Botones */
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .verify-button {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .verify-button:hover {
+            background-color: #388e3c;
+        }
+
+        .next-button {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .next-button:hover {
+            background-color: #1e88e5;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .correct {
+            color: #4caf50;
+            background-color: #c8e6c9;
+        }
+
+        .incorrect {
+            color: #f44336;
+            background-color: #ffcccb;
+        }
+
+        /* Panel de logros */
+        .achievement-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 400px;
+            background-color: #333;
+            border-radius: 10px;
+            color: #FFD700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            z-index: 100;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .achievement-top {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .achievement-bottom {
+            font-size: 18px;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de progreso y contador de ejercicio -->
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+    <div class="exercise-counter" id="exerciseCounter">Ejercicio 1 de 4</div>
+
+    <!-- Contenedor principal -->
+    <div class="container" id="exerciseContainer">
+        <!-- Frases arrastrables -->
+        <div class="phrases" id="phrases"></div>
+
+        <!-- Zona de destino para ordenar las frases -->
+        <div class="dropzone" id="dropzone">
+            <div class="placeholder">Arrastra las frases aquí en el orden correcto</div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button class="verify-button" onclick="checkOrder()">Verificar Respuesta</button>
+        <button class="next-button" onclick="nextExercise()" disabled>Siguiente Ejercicio</button>
+    </div>
+
+    <!-- Mensaje de retroalimentación -->
+    <div id="feedback" class="feedback"></div>
+
+    <!-- Panel de logros -->
+    <div id="achievementPanel" class="achievement-panel">
+        <div class="achievement-top">¡Excelente trabajo!</div>
+        <div class="achievement-bottom" id="medalDisplay">Medalla Obtenida: 🥇 Oro</div>
+        <div id="timeTaken" style="color: #FFFFFF;"></div>
+        <div id="scoreDisplay" style="color: #FFFFFF;"></div>
+    </div>
+
+    <script>
+        let exercises = [
+            {
+                phrases: [
+                    "Además, estudios recientes (López y Torres, 2020) han demostrado que la implementación de redes neuronales profundas permite una mejora considerable en la clasificación de imágenes en tiempo real.",
+                    "En conclusión, la sinergia entre diferentes técnicas de aprendizaje ha transformado el análisis de datos, proporcionando resultados más precisos y personalizables.",
+                    "Según Álvarez (2018), los avances en Machine Learning han permitido el desarrollo de algoritmos capaces de aprender de grandes volúmenes de datos, mejorando así la precisión en la toma de decisiones.",
+                    "García (2019) argumenta que el uso de técnicas de aprendizaje supervisado facilita el procesamiento de datos etiquetados, optimizando el rendimiento de modelos predictivos en entornos controlados."
+                ],
+                order: [3, 4, 1, 2]
+            },
+            {
+                phrases: [
+                    "Méndez (2021) sugiere que los juegos serios no solo facilitan el aprendizaje en entornos académicos, sino que también fomentan habilidades de pensamiento crítico mediante la simulación de problemas complejos.",
+                    "Finalmente, los estudios muestran que la aplicación de juegos serios en el aprendizaje tiene el potencial de transformar los métodos tradicionales, facilitando un aprendizaje más dinámico y práctico.",
+                    "En particular, los juegos de simulación aplicados a la educación superior permiten a los estudiantes experimentar escenarios realistas, promoviendo una mayor retención del conocimiento (Fernández, 2019).",
+                    "Por otro lado, investigaciones de Ruiz y Paredes (2020) han evidenciado que los juegos serios pueden ser efectivos para el entrenamiento en diversas disciplinas, como la medicina y la ingeniería."
+                ],
+                order: [1, 4, 2, 3]
+            },
+            {
+                phrases: [
+                    "Estudios recientes (Lara y Gómez, 2020) destacan que el IoT facilita la automatización de tareas, lo que reduce el consumo energético y aumenta la seguridad en el hogar y el lugar de trabajo.",
+                    "El Internet de las Cosas (IoT) ha revolucionado la forma en que los dispositivos se comunican y comparten datos, creando una red interconectada que permite una mayor eficiencia en la gestión de recursos (Castillo y Moreno, 2018).",
+                    "A su vez, Ramírez (2019) señala que los sensores y actuadores integrados en estos dispositivos permiten la recopilación de datos en tiempo real, lo cual es crucial para la toma de decisiones en aplicaciones industriales y domésticas.",
+                    "En conclusión, el IoT continúa expandiéndose, y se espera que su impacto en el desarrollo tecnológico sea aún mayor en los próximos años, integrando cada vez más dispositivos inteligentes."
+                ],
+                order: [2, 3, 1, 4]
+            },
+            {
+                phrases: [
+                    "López (2020) plantea que los ataques cibernéticos han evolucionado en complejidad, requiriendo sistemas de defensa más sofisticados como el uso de inteligencia artificial y aprendizaje automático.",
+                    "La seguridad informática es esencial en la era digital para proteger la confidencialidad, integridad y disponibilidad de la información (Martínez y Rojas, 2019).",
+                    "Por esta razón, la combinación de tecnologías avanzadas y una mayor capacitación de los usuarios podría reducir significativamente el riesgo de ataques, garantizando una protección integral en el entorno digital.",
+                    "Estudios como los de Vargas y Castillo (2021) sugieren que la concienciación del usuario es fundamental para prevenir incidentes de seguridad, especialmente en sectores críticos como la salud y la banca."
+                ],
+                order: [2, 1, 4, 3]
+            }
+        ];
+
+        let currentExercise = 0;
+        let correctAnswers = 0;
+        let dropzone = document.getElementById("dropzone");
+        let feedback = document.getElementById("feedback");
+        let startTime = new Date().getTime();
+
+        function loadExercise() {
+            const phrasesContainer = document.getElementById("phrases");
+            phrasesContainer.innerHTML = '';
+            exercises[currentExercise].phrases.forEach((phrase, index) => {
+                let phraseDiv = document.createElement("div");
+                phraseDiv.className = "draggable";
+                phraseDiv.draggable = true;
+                phraseDiv.dataset.order = index + 1;
+                phraseDiv.textContent = phrase;
+                phraseDiv.addEventListener("dragstart", dragStart);
+                phrasesContainer.appendChild(phraseDiv);
+            });
+            updatePlaceholder();
+            updateProgress();
+            document.getElementById("exerciseCounter").textContent = `Ejercicio ${currentExercise + 1} de ${exercises.length}`;
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData("text", e.target.dataset.order);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            let data = e.dataTransfer.getData("text");
+            let draggedItem = document.querySelector(`.draggable[data-order='${data}']`);
+            dropzone.appendChild(draggedItem);
+            updatePlaceholder();
+        }
+
+        function updatePlaceholder() {
+            if (dropzone.children.length > 1) {
+                dropzone.querySelector(".placeholder").style.display = "none";
+            } else {
+                dropzone.querySelector(".placeholder").style.display = "block";
+            }
+        }
+
+        function checkOrder() {
+            let items = Array.from(dropzone.children).filter(child => child.classList.contains("draggable"));
+            let isCorrect = items.every((item, index) => item.dataset.order == exercises[currentExercise].order[index]);
+            if (isCorrect) {
+                feedback.textContent = "¡Correcto!";
+                feedback.className = "feedback correct";
+                items.forEach(item => item.style.backgroundColor = "#c8e6c9");
+                correctAnswers++;
+            } else {
+                feedback.textContent = "Incorrecto. Revisa el orden y vuelve a intentarlo.";
+                feedback.className = "feedback incorrect";
+                items.forEach(item => item.style.backgroundColor = "#ffcccb");
+            }
+            feedback.style.display = "block";
+            document.querySelector(".next-button").disabled = false;
+        }
+
+        function nextExercise() {
+            feedback.style.display = "none";
+            dropzone.innerHTML = '<div class="placeholder">Arrastra las frases aquí en el orden correcto</div>';
+            document.querySelector(".next-button").disabled = true;
+            currentExercise++;
+            if (currentExercise < exercises.length) {
+                loadExercise();
+            } else {
+                showAchievement();
+            }
+        }
+
+        function updateProgress() {
+            const progressPercent = ((currentExercise + 1) / exercises.length) * 100;
+            document.getElementById("progress").style.width = `${progressPercent}%`;
+        }
+
+        function showAchievement() {
+            const endTime = new Date().getTime();
+            const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+            const achievementPanel = document.getElementById("achievementPanel");
+            const medalDisplay = document.getElementById("medalDisplay");
+            const timeDisplay = document.getElementById("timeTaken");
+            const scoreDisplay = document.getElementById("scoreDisplay");
+
+            let medal;
+            if (correctAnswers === 4) {
+                medal = "🥇 Oro";
+            } else if (correctAnswers === 3) {
+                medal = "🥈 Plata";
+            } else if (correctAnswers === 2) {
+                medal = "🥉 Bronce";
+            } else {
+                medal = "Sin medalla";
+            }
+
+            medalDisplay.textContent = `Medalla Obtenida: ${medal}`;
+            timeDisplay.textContent = `Tiempo total: ${timeTaken} segundos`;
+            scoreDisplay.textContent = `Respuestas correctas: ${correctAnswers} de 4`;
+            achievementPanel.style.display = "flex";
+            document.getElementById("exerciseContainer").style.display = "none";
+            document.querySelector(".buttons").style.display = "none";
+        }
+
+        loadExercise();
+        dropzone.addEventListener("dragover", dragOver);
+        dropzone.addEventListener("drop", drop);
+    </script>
+</body>
+</html>
