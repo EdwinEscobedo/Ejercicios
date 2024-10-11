@@ -1,0 +1,133 @@
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5e8d7;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #a65c3e;
+}
+
+/* Fondo animado en tonos naranja mate */
+.background-animation {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(120deg, #f5b7a5, #e08d6c);
+    background-size: 200% 200%;
+    animation: gradientMove 8s ease infinite;
+    z-index: -1;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Contenedor de los párrafos y la zona de destino */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Estilo para los párrafos arrastrables */
+.draggable {
+    width: 320px;
+    padding: 15px;
+    margin: 10px;
+    background-color: #fbe5d3;
+    border: 2px solid #d17b55;
+    border-radius: 8px;
+    cursor: grab;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.draggable.dragging {
+    opacity: 0.7;
+    cursor: grabbing;
+    transform: scale(1.05);
+}
+
+/* Zona de destino */
+.dropzone {
+    width: 340px;
+    min-height: 400px;
+    background-color: #f5e8d7;
+    border: 2px dashed #d17b55;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    transition: border-color 0.3s ease;
+}
+
+/* Mensajes de resultado */
+.result-message {
+    display: none;
+    font-size: 1.5rem;
+    margin-top: 20px;
+    animation: fade-in 0.5s ease;
+}
+
+#successMessage {
+    color: #a65c3e;
+    animation: bounce 1s infinite alternate;
+}
+
+#errorMessage {
+    color: #d17b55;
+}
+
+/* Animaciones de mensaje y rebote */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+/* Estilo para los botones de selección de ejercicio */
+.exercise-selection button {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    background-color: #f50000; /* Naranja inicial */
+    color: white;
+}
+
+/* Animación de escala y cambio de color al pasar el cursor */
+.exercise-selection button:hover {
+    transform: scale(1.1); /* Escala ligeramente el botón */
+    background-color: #e37a1e	; /* Naranja más oscuro */
+}
+
+/* Efecto de presión al hacer clic */
+.exercise-selection button:active {
+    transform: scale(1.05); /* Escala un poco menos al hacer clic */
+    background-color: #ba4825; /* Naranja aún más oscuro */
+}
