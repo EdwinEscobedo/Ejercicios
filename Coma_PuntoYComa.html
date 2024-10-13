@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Puntuación</title>
+    <style>
+        /* Fondo animado */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196f3, #f44336, #ffeb3b);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            height: 80vh;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .question-container {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .connector-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .connector {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: grab;
+            text-align: center;
+            width: 60px;
+            transition: background-color 0.3s;
+        }
+
+        .dropzone {
+            display: inline-block;
+            padding: 10px;
+            border: 2px dashed #ff7043;
+            width: 60px;
+            text-align: center;
+            font-size: 16px;
+            min-height: 1em;
+            vertical-align: middle;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 5px;
+            display: none;
+            text-align: left;
+        }
+
+        .correct {
+            color: #4caf50;
+            background-color: #c8e6c9;
+        }
+
+        .incorrect {
+            color: #ff7043;
+            background-color: #ffe0b2;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #verifyAnswer {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #ff7043;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 150px;
+        }
+
+        #verifyAnswer:hover {
+            background-color: #e64a19;
+        }
+
+        #nextExercise {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 5px;
+            cursor: not-allowed;
+            width: 150px;
+        }
+
+        #nextExercise.enabled {
+            cursor: pointer;
+            background-color: #388e3c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .achievement-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 400px;
+            background-color: #333;
+            border-radius: 10px;
+            color: #FFD700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            z-index: 100;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .achievement-top {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .achievement-bottom {
+            font-size: 36px;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="content">
+        <h2>Ejercicios de Puntuación</h2>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- Ejercicio 1 -->
+        <div id="exercise1" class="exercise question-container">
+            <p><strong>Ejercicio 1:</strong> "Hoy hemos trabajado mucho <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> por eso merecemos un descanso."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=",">,</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=";">;</button>
+            </div>
+            <div class="button-container">
+                <button id="verifyAnswer" onclick="checkAnswer('exercise1', ',')">Verificar Respuesta</button>
+                <button id="nextExercise" onclick="nextExercise()" disabled>Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback1" class="feedback"></div>
+        </div>
+
+        <!-- Ejercicio 2 -->
+        <div id="exercise2" class="exercise question-container" style="display: none;">
+            <p><strong>Ejercicio 2:</strong> "Llegamos temprano a la reunión <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> sin embargo, ya había comenzado."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=",">,</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=";">;</button>
+            </div>
+            <div class="button-container">
+                <button id="verifyAnswer" onclick="checkAnswer('exercise2', ';')">Verificar Respuesta</button>
+                <button id="nextExercise" onclick="nextExercise()" disabled>Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback2" class="feedback"></div>
+        </div>
+
+        <!-- Ejercicio 3 -->
+        <div id="exercise3" class="exercise question-container" style="display: none;">
+            <p><strong>Ejercicio 3:</strong> "Compraremos pan leche huevos <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> frutas."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=",">,</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=";">;</button>
+            </div>
+            <div class="button-container">
+                <button id="verifyAnswer" onclick="checkAnswer('exercise3', ',')">Verificar Respuesta</button>
+                <button id="nextExercise" onclick="nextExercise()" disabled>Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback3" class="feedback"></div>
+        </div>
+
+        <!-- Ejercicio 4 -->
+        <div id="exercise4" class="exercise question-container" style="display: none;">
+            <p><strong>Ejercicio 4:</strong> "Tiene buenos conocimientos en programación <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> no obstante, carece de experiencia laboral."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=",">,</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)" id=";">;</button>
+            </div>
+            <div class="button-container">
+                <button id="verifyAnswer" onclick="checkAnswer('exercise4', ';')">Verificar Respuesta</button>
+                <button id="nextExercise" onclick="nextExercise()" disabled>Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback4" class="feedback"></div>
+        </div>
+
+        <div id="achievementPanel" class="achievement-panel">
+            <div class="achievement-top">¡Excelente trabajo!</div>
+            <div class="achievement-bottom" id="medalDisplay">Medalla Obtenida: 🥇 Oro</div>
+        </div>
+    </div>
+
+    <script>
+        let currentExercise = 1;
+        let correctAnswers = 0;
+
+        window.onload = () => {
+            document.getElementById(`exercise${currentExercise}`).style.display = "flex";
+            updateProgress();
+        };
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            event.target.textContent = data;  // Display the symbol itself
+            event.target.dataset.connector = data;
+        }
+
+        function checkAnswer(exerciseId, correctAnswer) {
+            const dropzone = document.querySelector(`#${exerciseId} .dropzone`);
+            const feedback = document.getElementById(`feedback${exerciseId.slice(-1)}`);
+            
+            if (dropzone.dataset.connector === correctAnswer) {
+                feedback.textContent = "¡Correcto! Has seleccionado la puntuación adecuada.";
+                feedback.className = "feedback correct";
+                correctAnswers++;
+            } else {
+                feedback.textContent = "Incorrecto. Recuerda que el uso de la coma es para enumerar elementos o hacer pausas cortas, mientras que el punto y coma separa oraciones relacionadas.";
+                feedback.className = "feedback incorrect";
+            }
+            feedback.style.display = "block";
+            document.querySelector(`#${exerciseId} #nextExercise`).disabled = false;
+            document.querySelector(`#${exerciseId} #nextExercise`).classList.add("enabled");
+        }
+
+        function nextExercise() {
+            document.getElementById(`exercise${currentExercise}`).style.display = "none";
+            currentExercise++;
+            const nextExercise = document.getElementById(`exercise${currentExercise}`);
+            
+            if (nextExercise) {
+                nextExercise.style.display = "flex";
+                document.querySelector(`#exercise${currentExercise} #nextExercise`).disabled = true;
+                document.querySelector(`#exercise${currentExercise} #nextExercise`).classList.remove("enabled");
+            } else {
+                endExercise();
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progressPercent = (currentExercise / 4) * 100;
+            document.getElementById("progress").style.width = `${progressPercent}%`;
+        }
+
+        function endExercise() {
+            let medal;
+            if (correctAnswers === 4) {
+                medal = "🥇 Oro";
+            } else if (correctAnswers >= 2) {
+                medal = "🥈 Plata";
+            } else {
+                medal = "Sin medalla";
+            }
+
+            document.getElementById("medalDisplay").textContent = `Medalla Obtenida: ${medal}`;
+            document.getElementById("achievementPanel").style.display = "flex";
+        }
+    </script>
+</body>
+</html>

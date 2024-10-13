@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Puntuación</title>
+    <style>
+        /* Fondo animado */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196f3, #f44336, #ffeb3b);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientAnimation 10s ease infinite;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            height: 80vh;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+        h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .question-container {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .connector-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .connector {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: grab;
+            text-align: center;
+            width: 60px;
+            transition: background-color 0.3s;
+        }
+        .dropzone {
+            display: inline-block;
+            padding: 10px;
+            border: 2px dashed #ff7043;
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+            min-height: 1em;
+            vertical-align: middle;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 5px;
+            display: none;
+        }
+        .correct {
+            color: #4caf50;
+            background-color: #c8e6c9;
+        }
+        .incorrect {
+            color: #ff7043;
+            background-color: #ffe0b2;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .verify-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #ff7043;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .next-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .achievement-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 400px;
+            background-color: #333;
+            border-radius: 10px;
+            color: #FFD700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            z-index: 100;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .achievement-top {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+        .achievement-bottom {
+            font-size: 36px;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="content">
+        <h2>Ejercicios de Puntuación</h2>
+
+        <!-- Barra de progreso -->
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- Ejercicio 1 -->
+        <div id="exercise1" class="exercise question-container" style="display: flex;">
+            <p><strong>Ejercicio 1:</strong> "Los juegos serios han demostrado ser efectivos en la enseñanza de habilidades prácticas en ambientes controlados <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> según Gómez et al. (2021), estos juegos permiten a los estudiantes aplicar conceptos teóricos en escenarios interactivos <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> su uso ha incrementado en diversas disciplinas, como la medicina y la ingeniería, con resultados positivos en la retención de conocimientos."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)">•</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)">‣</button>
+            </div>
+            <div class="button-container">
+                <button class="verify-button" onclick="checkAnswer('exercise1', ['‣', '•'], 'Se usa punto aparte para separar ideas principales y punto seguido para detalles relacionados.')">Verificar Respuesta</button>
+                <button class="next-button" onclick="showNextExercise(2)">Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback1" class="feedback"></div>
+        </div>
+
+        <!-- Ejercicio 2 -->
+        <div id="exercise2" class="exercise question-container">
+            <p><strong>Ejercicio 2:</strong> "Los algoritmos de aprendizaje automático han avanzado significativamente en la última década <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> según Torres y Morales (2020), la precisión en la clasificación de imágenes ha mejorado gracias a técnicas de aprendizaje profundo <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> el uso de redes neuronales profundas permite a los modelos aprender patrones complejos en grandes volúmenes de datos."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)">•</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)">‣</button>
+            </div>
+            <div class="button-container">
+                <button class="verify-button" onclick="checkAnswer('exercise2', ['‣', '•'], 'Se debe usar punto aparte para iniciar con un autor y punto seguido para extender la idea en la misma línea.')">Verificar Respuesta</button>
+                <button class="next-button" onclick="showNextExercise(3)">Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback2" class="feedback"></div>
+        </div>
+
+        <!-- Ejercicio 3 -->
+        <div id="exercise3" class="exercise question-container">
+            <p><strong>Ejercicio 3:</strong> "La ciberseguridad en el ámbito de redes sociales es un tema crítico en la actualidad <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> autores como Pérez (2021) indican que los ataques dirigidos a datos personales están en aumento <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> nuevas técnicas de encriptación se están desarrollando para ofrecer una mayor protección a los usuarios."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)">•</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)">‣</button>
+            </div>
+            <div class="button-container">
+                <button class="verify-button" onclick="checkAnswer('exercise3', ['‣', '‣'], 'Se usa punto aparte para separar ideas distintas, como la introducción de un autor o de una solución.')">Verificar Respuesta</button>
+                <button class="next-button" onclick="showNextExercise(4)">Siguiente Ejercicio</button>
+            </div>
+            <div id="feedback3" class="feedback"></div>
+        </div>
+
+        <!-- Ejercicio 4 -->
+        <div id="exercise4" class="exercise question-container">
+            <p><strong>Ejercicio 4:</strong> "La seguridad en dispositivos IoT es un reto creciente debido a la expansión de estos sistemas <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> investigaciones recientes, como las de García y Rodríguez (2023), destacan la vulnerabilidad de los dispositivos conectados sin estándares de seguridad <span class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></span> se necesitan nuevos protocolos para proteger la integridad de la información transmitida."</p>
+            <div class="connector-container">
+                <button class="connector" draggable="true" ondragstart="drag(event)">•</button>
+                <button class="connector" draggable="true" ondragstart="drag(event)">‣</button>
+            </div>
+            <div class="button-container">
+                <button class="verify-button" onclick="checkAnswer('exercise4', ['•', '•'], 'Se usa punto seguido para ideas complementarias sobre el mismo tema en una sola línea.')">Verificar Respuesta</button>
+                <button class="next-button" onclick="showResults()">Finalizar</button>
+            </div>
+            <div id="feedback4" class="feedback"></div>
+        </div>
+
+        <div id="achievementPanel" class="achievement-panel">
+            <div class="achievement-top">¡Excelente trabajo!</div>
+            <div class="achievement-bottom" id="medalDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        let correctAnswers = 0;
+        let startTime = Date.now();
+        let currentExercise = 1;
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.textContent);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            event.target.textContent = data;
+            event.target.dataset.connector = data;
+        }
+
+        function checkAnswer(exerciseId, correctAnswersArr, explanation) {
+            const dropzones = document.querySelectorAll(`#${exerciseId} .dropzone`);
+            const feedback = document.getElementById(`feedback${exerciseId.slice(-1)}`);
+            let isCorrect = true;
+
+            dropzones.forEach((zone, index) => {
+                if (zone.dataset.connector !== correctAnswersArr[index]) {
+                    isCorrect = false;
+                }
+            });
+
+            if (isCorrect) {
+                correctAnswers++;
+                feedback.textContent = "¡Correcto!";
+                feedback.className = "feedback correct";
+            } else {
+                feedback.textContent = `Incorrecto. ${explanation}`;
+                feedback.className = "feedback incorrect";
+            }
+            feedback.style.display = "block";
+        }
+
+        function showNextExercise(nextExerciseId) {
+            document.querySelector(`#exercise${nextExerciseId - 1}`).style.display = "none";
+            document.querySelector(`#exercise${nextExerciseId}`).style.display = "flex";
+            updateProgress(nextExerciseId);
+        }
+
+        function updateProgress(exerciseNumber) {
+            const progress = document.getElementById("progress");
+            const progressPercentage = (exerciseNumber - 1) * 25;
+            progress.style.width = `${progressPercentage}%`;
+        }
+
+        function showResults() {
+            const endTime = Date.now();
+            const totalTime = Math.floor((endTime - startTime) / 1000);
+            const medalDisplay = document.getElementById("medalDisplay");
+
+            if (correctAnswers === 4 && totalTime <= 60) {
+                medalDisplay.textContent = "Medalla Obtenida: 🥇 Oro";
+            } else if (correctAnswers >= 2) {
+                medalDisplay.textContent = "Medalla Obtenida: 🥈 Plata";
+            } else {
+                medalDisplay.textContent = "Sin medalla";
+            }
+            document.getElementById("achievementPanel").style.display = "flex";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios comunes de ortografía</title>
+    <style>
+        /* Fondo animado */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196f3, #f44336, #ffeb3b);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            height: 80vh;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        .question {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .options {
+            margin-top: 10px;
+        }
+
+        .options input {
+            margin-right: 10px;
+        }
+
+        .score-timer {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* Barra de progreso */
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Panel de logros */
+        .achievement-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            max-width: 400px;
+            background-color: #333;
+            border-radius: 10px;
+            color: #FFD700;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            z-index: 100;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .achievement-top {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .achievement-bottom {
+            font-size: 36px;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="background"></div>
+<div class="content">
+    <h2>Ejercicios comunes de ortografía</h2>
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+    <div id="question-area">
+        <button class="button" id="startButton" onclick="startQuiz()">Iniciar Actividades</button>
+    </div>
+    <div class="score-timer">
+        <span id="timer">Tiempo: 0 segundos</span> | 
+        <span id="score">Puntaje: 0</span>
+    </div>
+</div>
+
+<div id="achievementPanel" class="achievement-panel">
+    <div class="achievement-top">¡Excelente trabajo!</div>
+    <div class="achievement-bottom" id="medalDisplay">Medalla Obtenida: 🥇 Oro</div>
+    <div id="timeMessage" style="color: #FFFFFF; font-size: 18px;"></div>
+</div>
+
+<script>
+    let questions = [
+        { question: "¿Debe llevar tilde en 'solo' si no hay riesgo de ambigüedad?", options: ["Sí", "No", "Depende"], correct: 1 },
+        { question: "¿Debe llevar tilde 'este' si no hay riesgo de ambigüedad?", options: ["Sí", "No", "Depende"], correct: 1 },
+        { question: "¿Debe llevar tilde en 'aquella' en este contexto: 'aquella vez fue inolvidable'?", options: ["Sí", "No", "Depende"], correct: 1 },
+        { question: "¿Cuál es la forma correcta?", options: ["Ex-alumno", "Exalumno", "Ex Alumno"], correct: 1 },
+        { question: "¿Cuál es la forma correcta?", options: ["Co-operar", "Cooperar", "Cooperár"], correct: 1 },
+        { question: "¿Cuál es la forma correcta?", options: ["Anti-OTAN", "Anti OTAN", "AntiOTAN"], correct: 0 },
+        { question: "¿Cómo se escribe correctamente?: 15 % o 15%", options: ["15 %", "15%", "15-%"], correct: 0 },
+        { question: "¿Cuál es la forma correcta?: 1 234,56 o 1234.56", options: ["1 234,56", "1234.56", "1,234.56"], correct: 0 },
+        { question: "¿Cómo se escribe?: los 80 o los años 80", options: ["los 80", "los años 80", "Los 80´s"], correct: 1 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timer;
+    let seconds = 0;
+
+    function startQuiz() {
+        document.getElementById('startButton').style.display = 'none';
+        displayQuestion();
+        timer = setInterval(() => {
+            seconds++;
+            document.getElementById('timer').innerText = `Tiempo: ${seconds} segundos`;
+        }, 1000);
+    }
+
+    function displayQuestion() {
+        if (currentQuestion >= questions.length) {
+            endQuiz();
+            return;
+        }
+
+        let q = questions[currentQuestion];
+        let questionHtml = `<div class="question">${q.question}</div>`;
+        questionHtml += '<div class="options">';
+        q.options.forEach((option, index) => {
+            questionHtml += `<label><input type="radio" name="option" value="${index}">${option}</label><br>`;
+        });
+        questionHtml += '</div>';
+        questionHtml += '<button class="button" onclick="submitAnswer()">Calificar</button>';
+        document.getElementById('question-area').innerHTML = questionHtml;
+    }
+
+    function submitAnswer() {
+        let selectedOption = document.querySelector('input[name="option"]:checked');
+        if (!selectedOption) {
+            alert("Por favor selecciona una opción.");
+            return;
+        }
+        let answer = parseInt(selectedOption.value);
+        if (answer === questions[currentQuestion].correct) {
+            score++;
+        }
+        currentQuestion++;
+        document.getElementById('score').innerText = `Puntaje: ${score}`;
+        updateProgress();
+        displayQuestion();
+    }
+
+    function updateProgress() {
+        const progressPercent = ((currentQuestion) / questions.length) * 100;
+        document.getElementById("progress").style.width = `${progressPercent}%`;
+    }
+
+    function endQuiz() {
+        clearInterval(timer);
+        let medal;
+        if (score === questions.length) {
+            medal = "🥇 Oro";
+        } else if (score >= Math.floor(questions.length * 0.7)) {
+            medal = "🥈 Plata";
+        } else if (score >= Math.floor(questions.length * 0.5)) {
+            medal = "🥉 Bronce";
+        } else {
+            medal = "Sin medalla";
+        }
+
+        document.getElementById('question-area').innerHTML = `<h2>Has completado el quiz</h2>
+        <p>Tu puntaje total es: ${score}/${questions.length}</p>
+        <p>Tiempo total: ${seconds} segundos</p>`;
+
+        document.getElementById("medalDisplay").textContent = `Medalla Obtenida: ${medal}`;
+        document.getElementById("timeMessage").textContent = `Tiempo: ${seconds} segundos | Puntaje: ${score}`;
+        document.getElementById("achievementPanel").style.display = "flex";
+    }
+</script>
+
+</body>
+</html>

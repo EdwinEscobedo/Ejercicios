@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicios de Ortografía</title>
+    <title>Ejercicios de Signos de Puntuación</title>
     <style>
         /* Fondo animado */
         body {
@@ -38,7 +38,7 @@
         .container {
             display: flex;
             width: 100%;
-            height: 85vh;
+            height: 90vh;
         }
 
         h1 {
@@ -50,8 +50,7 @@
         }
 
         .sidebar {
-            width: 220px;
-            max-width: 250px;
+            width: 250px;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
             display: flex;
@@ -59,12 +58,11 @@
             gap: 10px;
             box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
             z-index: 1;
-            overflow-y: auto; /* Permitir desplazamiento */
         }
 
         .sidebar button {
-            padding: 10px;
-            font-size: 14px;
+            padding: 12px;
+            font-size: 16px;
             cursor: pointer;
             background-color: #ff7043;
             color: white;
@@ -133,41 +131,30 @@
 <body>
     <div class="background"></div>
 
-    <h1>Ejercicios de Ortografía</h1>
+    <h1>Ejercicios de Signos de Puntuación</h1>
 
     <div class="container">
         <div class="sidebar">
-            <button onclick="loadPage('Ambiguedad.html')">Ambigüedad</button>
-            <button onclick="loadPage('VozActiva.html')">Voz Activa</button>
-            <button onclick="loadPage('SecuenciasCorrelaciones.html')">Secuencias y Correlaciones</button>
-            <button onclick="loadPage('UsoIndebidoGerundio.html')">Uso Indebido del Gerundio</button>
-            <button onclick="loadPage('Dequeismo.html')">Dequeísmo</button>
-            <button onclick="loadPage('UsoExcesivoAdverbios.html')">Uso Excesivo de Adverbios</button>
-            <button onclick="loadPage('UsoElMismo.html')">Uso de 'El Mismo'/'La Misma'</button>
-            <button onclick="loadPage('UsoIndiscriminadoAdjetivos.html')">Uso Indiscriminado de Adjetivos</button>
-            <button onclick="loadPage('AbundanciaIncisos.html')">Abundancia de Incisos</button>
-            <button onclick="loadPage('EjerciciosOrtografiaJorge.html')">Cuestionario</button>
-
+            <button onclick="loadPage('PuntoSeguido_PuntoAparte.html')">Punto seguido y punto aparte</button>
+            <button onclick="loadPage('Coma_PuntoYComa.html')">Coma y punto y coma</button>
+            <button onclick="loadPage('DosPuntos.html')">Los dos puntos</button>
+            <button onclick="loadPage('Parentesis.html')">Paréntesis</button>
             <button class="home-button" onclick="goToHome()">Ir al Inicio</button>
         </div>
 
         <div class="content">
             <div id="welcomeMessage" class="welcome-message">
-                <h2>Bienvenido a los Ejercicios de Ortografía</h2>
-                <p>La ortografía es una habilidad esencial para comunicarnos de manera clara y precisa. A continuación, te presentamos algunos de los errores ortográficos más comunes y consejos sobre cómo evitarlos en tus escritos:</p>
-                <h2>Errores Comunes en Ortografía</h2>
+                <h2>Bienvenido a los Ejercicios de Signos de Puntuación</h2>
+                <p>Dominar los signos de puntuación es esencial para una escritura clara y coherente. A continuación, te explicamos los diferentes signos de puntuación y cómo utilizarlos correctamente en tus escritos:</p>
+                
+                <h2>Signos de Puntuación y su Uso</h2>
                 <ul>
-                    <li><strong>Ambigüedad:</strong> Ocurre cuando una frase tiene múltiples interpretaciones posibles. Es clave ser claro y preciso para evitar malentendidos.</li>
-                    <li><strong>Voz Activa:</strong> La voz activa da fuerza y claridad a tus frases, haciéndolas más directas. La voz pasiva puede ser menos impactante y confusa.</li>
-                    <li><strong>Secuencias y Correlaciones:</strong> Asegura que las ideas se presenten en un orden lógico y coherente para mejorar la comprensión.</li>
-                    <li><strong>Uso Indebido del Gerundio:</strong> El gerundio expresa una acción simultánea al verbo principal. Es importante conocer cuándo usarlo correctamente.</li>
-                    <li><strong>Dequeísmo:</strong> Este error se da al añadir la preposición "de" innecesariamente antes de "que". Aprende cuándo es correcto usarla.</li>
-                    <li><strong>Uso Excesivo de Adverbios:</strong> Usar demasiados adverbios debilita la frase. Úsalos solo cuando sean necesarios.</li>
-                    <li><strong>Uso de "El Mismo/La Misma":</strong> Reemplaza estos términos con pronombres adecuados o posesivos para evitar repeticiones innecesarias.</li>
-                    <li><strong>Uso Indiscriminado de Adjetivos:</strong> Los adjetivos deben añadir valor y ser usados con moderación para evitar redundancias.</li>
-                    <li><strong>Abundancia de Incisos:</strong> Limita los incisos para mantener un flujo claro en el texto y evitar interrupciones innecesarias.</li>
+                    <li><strong>Punto seguido y punto aparte:</strong> El punto seguido se usa para separar oraciones dentro de un mismo párrafo, mientras que el punto aparte indica el final de un párrafo.</li>
+                    <li><strong>Coma y punto y coma:</strong> La coma separa elementos dentro de una oración, y el punto y coma separa oraciones relacionadas.</li>
+                    <li><strong>Dos puntos:</strong> Se utilizan para introducir una explicación, una lista o una cita directa.</li>
+                    <li><strong>Paréntesis:</strong> Encierran información adicional o aclaraciones que complementan el contenido principal.</li>
                 </ul>
-                <p>Selecciona un tema en la barra de la izquierda para comenzar. ¡A practicar!</p>
+                <p>Selecciona un tema en la barra de la izquierda para practicar los diferentes usos de estos signos. ¡Comencemos!</p>
             </div>
             <iframe id="contentFrame"></iframe>
         </div>
